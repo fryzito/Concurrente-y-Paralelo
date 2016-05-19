@@ -2,18 +2,13 @@
 #include <omp.h>
 using namespace std;
 
-int conv2dSerial(const vector<vector<float>> &img, 
-		 const vector<vector<float>> &kernel, 
-		 const int &dim, 
-		 const int &r)
-{
+int conv2dSerial(const vector<vector<float>> &img,const vector<vector<float>> &kernel,const int &dim,const int &r){
   float sum;
   clock_t t;
   vector<vector<float>> result(dim);
   for (int i=0; i<dim; i++)
     result[i].resize(dim);
-  
-  cout << "Empezando a tomar tiempo:\n" << endl;
+ 
   t = clock();  
   for (int i=r; i<dim-r; i++){
     for (int j=r; j<dim-r; j++){
@@ -27,21 +22,17 @@ int conv2dSerial(const vector<vector<float>> &img,
     }
   }
   t = clock() - t;
-  cout << "time mean (conv2dSerial): " << (float)t/CLOCKS_PER_SEC << endl;
+  cout << "Tiempo convolucion 2D Secuencial: " << (float)t/CLOCKS_PER_SEC << endl;
   return 0;
 }
 
-int conv2dPar(const vector<vector<float>> &img, const vector<vector<float>> &kernel, 
-	      const int &dim, 
-	      const int &r){
+int conv2dPar(const vector<vector<float>> &img, const vector<vector<float>> &kernel,const int &dim,const int &r){
   float sum;
   clock_t t;
   
   vector<vector<float>> result(dim);
   for (int i=0; i<dim; i++)
     result[i].resize(dim);
-  
-  cout << "Empezando.." << endl;
   t = clock();
   
   #pragma omp parallel for private(sum)
@@ -57,7 +48,7 @@ int conv2dPar(const vector<vector<float>> &img, const vector<vector<float>> &ker
     }
   }
   t = clock() - t;
-  cout << "time mean (conv2dPar): " << (float)t/CLOCKS_PER_SEC << endl;
+  printf("Tiempo convolucion 2D Paralelo: %f\n",(float)t/CLOCKS_PER_SEC );
   return 0;
 }
 
